@@ -5,7 +5,7 @@ import thunkMiddleware from "redux-thunk";
 // import tick from "./tick/reducer";
 import products from "./products/reducer";
 // import productDetails from "./productDetails/reducer";
-// import cart from "./cart/reducer";
+import cart from "./cart/reducer";
 import { some, isEmpty } from "lodash";
 import Cookie from "js-cookie";
 
@@ -19,6 +19,7 @@ const bindMiddleware = (middleware) => {
 
 const combinedReducer = combineReducers({
   products,
+  cart,
 });
 
 const reducer = (state, action) => {
@@ -27,7 +28,7 @@ const reducer = (state, action) => {
       ...state, // use previous state
       ...action.payload, // apply delta from hydration
     };
-    if (state.count) nextState.count = state.count; // preserve count value on client side navigation
+    // if (state.count) nextState.count = state.count; // preserve count value on client side navigation
     if (state.products.products.length) nextState.products = state.products;
 
     if (state.cart.cartItems.length)

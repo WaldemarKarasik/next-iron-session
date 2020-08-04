@@ -1,62 +1,74 @@
-import React from "react";
-import Layout from "../components/Layout";
+import { useSelector, useDispatch } from "react-redux";
+import Axios from "axios";
+import Link from "next/link";
+import { wrapper } from "../store/store";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import withSession from "../lib/session";
+const Home = ({ session }) => {
+  const router = useRouter();
+  // const products = [...data];
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.products.products);
 
-const Home = () => (
-  <Layout>
-    <h1>
-      <img
-        src="/GitHub-Mark-32px.png"
-        width="32"
-        height="32"
-        style={{ marginRight: ".3em", verticalAlign: "middle" }}
-      />
-      <a href="https://github.com/vvo/next-iron-session">next-iron-session</a> -
-      Authentication example
-    </h1>
+  return (
+    <main className="main">
+      <div className="content">
+        <ul className="products">
+          {products.length
+            ? products.map((product) => (
+                <li key={product._id}>
+                  <div className="product">
+                    <div className="product__image__container">
+                      <img
+                        onClick={() =>
+                          router.push(
+                            "/products/[id]",
+                            `/products/${product._id}`
+                          )
+                        }
+                        className="product-image"
+                        src={product.image}
+                        alt="product"
+                      />
+                    </div>
+                    <div className="product__info__container">
+                      <div className="product-name">
+                        <Link
+                          href="/products/[id]"
+                          as={`/products/${product._id}`}
+                        >
+                          <a>{product.name}</a>
+                        </Link>
+                      </div>
+                      <div className="product-brand">{product.brand}</div>
+                      <div className="product-price">
+                        {product.price}&#8381;
+                      </div>
+                      <div className="product-rating">
+                        {product.rating} Stars ({product.numReviews})
+                      </div>
+                    </div>
+                    <div className="product__action">
+                      <div>
+                        <button className="button primary">Купить</button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ))
+            : null}
+        </ul>
+      </div>
+    </main>
+  );
+};
 
-    <p>
-      This example creates an authentication system that uses a{" "}
-      <b>signed and encrypted cookie to store session data</b>.
-    </p>
+export const getServerSideProps = wrapper.getServerSideProps(
+  withSession(async (ctx) => {
+    const { data } = await Axios.get(`${process.env.BASE_URL}/api/products`);
 
-    <p>
-      It uses current best practices as for authentication in the Next.js
-      ecosystem:
-      <br />
-      1. <b>no `getInitialProps`</b> to ensure every page is static
-      <br />
-      2. <b>`useUser` hook</b> together with `
-      <a href="https://swr.now.sh/">swr`</a> for data fetching
-    </p>
-
-    <h2>Features</h2>
-
-    <ul>
-      <li>Logged in status synchronized between browser windows/tabs</li>
-      <li>Layout based on logged in status</li>
-      <li>All pages are static</li>
-      <li>Session data is signed and encrypted in a cookie</li>
-    </ul>
-
-    <h2>Steps to test the functionality:</h2>
-
-    <ol>
-      <li>Click login and enter your GitHub username.</li>
-      <li>
-        Click home and click profile again, notice how your session is being
-        used through a token stored in a cookie.
-      </li>
-      <li>
-        Click logout and try to go to profile again. You'll get redirected to
-        the `/login` route.
-      </li>
-    </ol>
-    <style jsx>{`
-      li {
-        margin-bottom: 0.5rem;
-      }
-    `}</style>
-  </Layout>
+    ctx.store.dispatch({ type: "PRODUCTS_LOADED", payload: data });
+  })
 );
-
 export default Home;
