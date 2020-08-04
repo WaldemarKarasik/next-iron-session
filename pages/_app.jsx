@@ -1,5 +1,8 @@
 import { SWRConfig } from "swr";
 import fetch from "../lib/fetchJson";
+import HeaderAndAside from "../components/HeaderAndAside";
+import "../styles/global.css";
+import "antd/dist/antd.css";
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -11,7 +14,10 @@ function MyApp({ Component, pageProps }) {
         },
       }}
     >
-      <Component {...pageProps} />
+      <div className="grid-container">
+        <HeaderAndAside />
+        <Component {...pageProps} />
+      </div>
     </SWRConfig>
   );
 }
