@@ -1,0 +1,56 @@
+{
+  "name": "with-iron-session",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "start": "next start"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true,
+      "node": true
+    },
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 2019,
+      "sourceType": "module"
+    },
+    "settings": {
+      "react": {
+        "version": "16.3.0"
+      }
+    },
+    "plugins": [
+      "react",
+      "react-hooks"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended"
+    ],
+    "rules": {
+      "react-hooks/exhaustive-deps": "warn",
+      "react-hooks/rules-of-hooks": "error",
+      "react/no-unescaped-entities": "off",
+      "react/prop-types": "warn"
+    },
+    "ignorePatterns": [
+      "node_modules/"
+    ]
+  },
+  "devDependencies": {
+    "next": "9.5.1",
+    "next-iron-session": "4.1.7",
+    "node-fetch": "2.6.0",
+    "prop-types": "15.7.2",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "swr": "0.3.0"
+  }
+}
