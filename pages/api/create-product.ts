@@ -33,13 +33,11 @@ try {
 }
 
 export default withSession(async (req, res) => {
-  if (req.query.id) {
-    // const product = data.products.find((x) => x._id == req.query.id);
-    const product = await Product.findOne({ _id: req.query.id }).lean();
-    if (product) {
-      return res.json(product);
-    }
+  const newProduct = new Product(req.body);
+  try {
+    await newProduct.save();
+    return res.status(201).json(newProduct);
+  } catch (e) {
+    return res.json({ message: "Failed to create product", ok: false });
   }
-  const products = await Product.find().populate("category").lean();
-  return res.json(products);
 });
